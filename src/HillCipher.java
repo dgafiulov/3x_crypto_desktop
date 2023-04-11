@@ -10,16 +10,36 @@ public class HillCipher {
         return encoded;
     }
 
+    public byte[] decode(byte[] encoded, String key) {
+        byte[][] keyMatrix = keyToMatrix(key);
+        return new byte[]{};
+    }
+
     private byte[][] keyToMatrix(String key) {
         if (Objects.equals(key, "")) {
             key = "key";
         }
-        byte[] bytes = key.getBytes();
+
+        byte[] bytes;
         byte[][] keyMatrix = new byte[2][2];
-        keyMatrix[0][0] = bytes[0 % bytes.length];
-        keyMatrix[0][1] = bytes[1 % bytes.length];
-        keyMatrix[1][0] = bytes[2 % bytes.length];
-        keyMatrix[1][1] = bytes[3 % bytes.length];
+
+        int amountOfMoves = 0;
+
+        while (true) {
+            bytes = key.getBytes();
+            keyMatrix[0][0] = bytes[0 % bytes.length];
+            keyMatrix[0][1] = bytes[1 % bytes.length];
+            keyMatrix[1][0] = bytes[2 % bytes.length];
+            keyMatrix[1][1] = bytes[3 % bytes.length];
+            if (matrixDeterminant(keyMatrix) != 0) {
+                break;
+            } else if (amountOfMoves >= key.length()) {
+                key = "donut";
+            } else {
+                key = key.substring(1) + key.charAt(0);
+                amountOfMoves++;
+            }
+        }
         return keyMatrix;
     }
 
@@ -38,5 +58,32 @@ public class HillCipher {
             bytes[i + 1] = multiplyRes[1];
         }
         return bytes;
+    }
+
+    private int matrixDeterminant(byte[][] matrix) {
+        return (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
+    }
+
+    /*private byte[] inverseMatrix(byte[][] key) {
+
+    }*/
+
+    private byte[][] minorMatrix(byte[][] key) {
+        byte temp1 = key[0][0];
+        byte temp2 = key[0][1];
+
+        key[0][0] = key[1][1];
+        key[0][1] = key[1][0];
+        key[1][0] = temp2;
+        key[1][1] = temp1;
+
+        return key;
+    }
+
+    private byte[][] matrixOfAlgebraicAdditions(byte[][] key) {
+        key[0][1] *= -1;
+        key[1][0] *= -1;
+
+        return key;
     }
 }
