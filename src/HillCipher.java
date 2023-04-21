@@ -30,7 +30,7 @@ public class HillCipher {
             finalRes[i + 1] = multiplyRes[1];
         }
 
-        return bytes;
+        return finalRes;
     }
 
     public byte[] decode(byte[] origByte, String key, boolean even) {
@@ -42,7 +42,7 @@ public class HillCipher {
         if (even) {
             return origByte;
         } else {
-            return Arrays.copyOfRange(origByte, 0, origByte.length - 2);
+            return Arrays.copyOfRange(origByte, 0, origByte.length - 1);
         }
     }
 
