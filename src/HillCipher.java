@@ -3,14 +3,6 @@ import java.util.Objects;
 
 public class HillCipher {
 
-    public void testFunc() {
-
-        int[][] matr = keyToMatrix("doggy");
-        int[][] m = inverseMatrix(matr);
-        System.out.println(Arrays.deepToString(m));
-
-    }
-
     //main functions
     public byte[] encode(byte[] byteOrig, String key) {
         int[] orig = byteToIntArray(byteOrig);
@@ -19,7 +11,42 @@ public class HillCipher {
         return intToByteArray(encoded);
     }
 
-    private int[] bytesEncode(int[] bytes, int[][] key) {
+    private int[] bytesEncode(int[] bytesOr, int[][] key) {
+        int[] multiplyRes;
+        boolean even = bytesOr.length % 2 == 0;
+        int[] finalRes = new int[even ? bytesOr.length : bytesOr.length + 1];
+        int[] bytes;
+
+        if (!even) {
+            bytes = Arrays.copyOf(bytesOr, bytesOr.length + 1);
+            bytes[bytesOr.length] = 0;
+        } else {
+            bytes = bytesOr;
+        }
+
+        for (int i = 0; i < bytes.length; i = i + 2) {
+            multiplyRes = matrixMultiply(new int[]{bytes[i], bytes[i + 1]}, key);
+            finalRes[i] = multiplyRes[0];
+            finalRes[i + 1] = multiplyRes[1];
+        }
+
+        return bytes;
+    }
+
+    public byte[] decode(byte[] origByte, String key, boolean even) {
+        int[][] keyMatrix = keyToMatrix(key);
+        keyMatrix = inverseMatrix(keyMatrix);
+        int[] bytes = byteToIntArray(origByte);
+        bytes = bytesDecode(bytes, keyMatrix);
+        origByte = intToByteArray(bytes);
+        if (even) {
+            return origByte;
+        } else {
+            return Arrays.copyOfRange(origByte, 0, origByte.length - 2);
+        }
+    }
+
+    private int[] bytesDecode(int[] bytes, int[][] key) {
         int[] multiplyRes;
         int[] finalRes = new int[bytes.length];
         for (int i = 0; i < bytes.length; i = i + 2) {
@@ -30,39 +57,7 @@ public class HillCipher {
         return finalRes;
     }
 
-    /*
-    public int[] decode(byte[] encoded, String key) {
-        int[][] keyMatrix = keyToMatrix(key);
-        int[][] inverseKeyMatrix = inverseMatrix(keyMatrix);
-
-        return bytesDecode(encoded, inverseKeyMatrix);
-    }
-
-    private double[] bytesDecode(byte[] bytes, double[][] key) {
-        double[] multiplyRes;
-        double[] finalRes = new double[bytes.length];
-        for (int i = 0; i < bytes.length; i = i + 2) {
-            multiplyRes = matrixMultiply(new double[]{bytes[i], bytes[i + 1]}, key);
-            finalRes[i] = multiplyRes[0];
-            finalRes[i + 1] = multiplyRes[1];
-        }
-        return finalRes;
-    }
-     */
-
     //general matrix operations
-    private int[][] byteToIntMatrix(byte[][] orig) {
-        int[][] matrix = new int[orig.length][orig[0].length];
-
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                matrix[i][j] = orig[i][j] + 128;
-            }
-        }
-
-        return matrix;
-    }
-
     private int[] byteToIntArray(byte[] orig) {
         int[] matrix = new int[orig.length];
 
@@ -103,10 +98,8 @@ public class HillCipher {
             keyMatrix[1][0] = bytes[2 % bytes.length];
             keyMatrix[1][1] = bytes[3 % bytes.length] + plus11;
             if (determinantCheck(matrixDeterminant(keyMatrix))) {
-                System.out.println("good matrix " + Arrays.deepToString(keyMatrix) + " with det = " + matrixDeterminant(keyMatrix));
                 break;
             } else {
-                System.out.println("bad matrix " + Arrays.deepToString(keyMatrix) + " with det = " + matrixDeterminant(keyMatrix));
                 if (keyMatrix[0][0] % 2 == 0) {
                     plus00++;
                 }
@@ -146,41 +139,15 @@ public class HillCipher {
         return (matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]);
     }
 
-    private int inverseDet(int det, int x) {
-        int res = x;
-
-        if (det < 0 & x > 0 ) {
-            res = x;
-        } else if (det > 0 & x < 0) {
-            res = x + 256;
-        } else if (det > 0 & x > 0) {
-            res = x;
-        } else if (det < 0 & x < 0) {
-            res = x * -1;
-        }
-        return res;
-    }
-
     private int[][] inverseMatrix(int[][] key) {
         int determinant = ring(matrixDeterminant(key), 256);
         int x = gcd(determinant, 256)[0];
         int inverseDeterminant = ring(x, 256);
         int[][] matrix = matrixOfAlgebraicAdditions(key);
-        //matrix = modulo(matrix, 256);
         matrix = matrixMultiply(inverseDeterminant, matrix);
-        //matrix = modulo(matrix, 256);
         matrix = transposeMatrix(matrix);
         matrix = makePositive(matrix, 256);
         return matrix;
-    }
-
-    private int[][] modulo(int[][] key, int num) {
-        for (int i = 0; i < key.length; i++) {
-            for (int j = 0; j < key[0].length; j++) {
-                key[i][j] = key[i][j] % num;
-            }
-        }
-        return key;
     }
 
     private int[][] matrixOfAlgebraicAdditions(int[][] key) {
