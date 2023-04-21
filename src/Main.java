@@ -4,50 +4,52 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        //HillCipher hillCipher = new HillCipher();
+        HillCipher cipher = new HillCipher();
+        cipher.testFunc();
 
-//        File orig = new File("source-for-test/origVid.mp4");
-//        FileInputStream inputStream = new FileInputStream(orig);
-//        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-//        byte[] data = bufferedInputStream.readAllBytes();
-//
-//        bufferedInputStream.close();
-//
-//        PlayfairCipher cryptographer = new PlayfairCipher();
-//
-////        VigenereCipher cryptographer = new VigenereCipher();
-////        byte[] newData = cryptographer.encode(data, "dog");
-////        byte[] backToOrig = cryptographer.decode(newData, "dog");
-//
-//        FileOutputStream out1 = new FileOutputStream("source-for-test/coded.encry");
-//        BufferedOutputStream bfw1 = new BufferedOutputStream(out1);
-//        Byte[] dataObj = new Byte[data.length];
-//
-//        for (int i = 0; i < data.length; i++) {
-//            dataObj[i] = data[i];
-//        }
-//
-//        System.out.println();
-//
-//        byte[] newData = cryptographer.encode(dataObj, "dog");
-//
-//        for (byte i:newData) {
-//            bfw1.write(i);
-//        }
-//
-//        byte[] backToOrig = cryptographer.decode(newData, "dog", true);
-//
-//        bfw1.close();
-//        out1.close();
-//
-//        FileOutputStream out2 = new FileOutputStream("source-for-test/decodedVid.mp4");
-//        BufferedOutputStream bfw2 = new BufferedOutputStream(out2);
-//
-//        for (byte i:backToOrig) {
-//            bfw2.write(i);
-//        }
-//
-//        bfw2.close();
-//        out1.close();
+        /*
+
+        File orig = new File("source-for-test/origTxt.txt");
+        FileInputStream inputStream = new FileInputStream(orig);
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+        byte[] data = bufferedInputStream.readAllBytes();
+
+        byte[] encoded = cipher.encode(data, "dog");
+
+        inputStream.close();
+        bufferedInputStream.close();
+
+        System.out.println(Arrays.toString(data));
+        System.out.println(Arrays.toString(encoded)); */
+
+        //double[] decoded = cipher.decode(encoded, "dog");
+
+
+        //System.out.println(Arrays.toString(decoded));
+
+
+        /*FileOutputStream out1 = new FileOutputStream("source-for-test/coded.encry");
+        BufferedOutputStream bfw1 = new BufferedOutputStream(out1);
+
+        for (byte i:encoded) {
+            bfw1.write(i);
+        }
+
+        bfw1.close();
+        out1.close();
+
+        FileOutputStream out2 = new FileOutputStream("source-for-test/decodedPic.png");
+        BufferedOutputStream bfw2 = new BufferedOutputStream(out2);
+
+        byte[] decoded = cipher.decode(encoded, "dog", true);
+
+        for (byte i:decoded) {
+            bfw2.write(i);
+        }
+
+        bfw2.close();
+        out1.close();
+
+        */
     }
 }
