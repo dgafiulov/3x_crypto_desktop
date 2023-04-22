@@ -5,35 +5,17 @@ public class PlayfairCipher {
 
     PlayfairMatrix matrix;
 
-
-    private ArrayList<Byte> array_init(ArrayList<Byte> orig) {
-        if (orig.size() % 2 != 0) {
-            orig.add((byte) -128);
-        }
-        return orig;
-    }
-
-    private byte[] notEven(byte[] orig) {
-        byte[] encoded = new byte[orig.length - 1];
-        System.arraycopy(orig, 0, encoded, 0, orig.length - 1);
-        return encoded;
-    }
-
     public byte[] encode(Byte[] origInc, String key) {
         ArrayList<Byte> orig = new ArrayList<>(Arrays.asList(origInc));
         matrix = new PlayfairMatrix(key);
         matrix.createMatrix();
-        orig = array_init(orig);
         return encodeOrig(orig);
     }
 
-    public byte[] decode(byte[] encoded, String key, boolean wasEven) {
+    public byte[] decode(byte[] encoded, String key) {
         matrix = new PlayfairMatrix(key);
         matrix.createMatrix();
         decodeOrig(encoded);
-        if (!wasEven) {
-            encoded = notEven(encoded);
-        }
         return encoded;
     }
 
