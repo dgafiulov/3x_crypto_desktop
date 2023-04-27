@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.SortedMap;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -25,25 +24,35 @@ public class Main {
             answer = scan.next();
 
             if (Objects.equals(answer, "1")) {
-                System.out.println("Напишите полный путь до файла, который вы хотите зашифровать: ");
-                pathFrom = scan.next();
-                System.out.println("Напишите полный путь до файла (включая название), куда вы хотите сохранить зашифрованный файл: ");
-                pathTo = scan.next();
-                System.out.println("Напишите пароль для файла: ");
-                password = scan.next();
-                cipher.encode(pathFrom, pathTo, password);
-                System.out.println("Шифрование прошло успешно!");
-                System.out.println();
+                try {
+                    System.out.println("Напишите полный путь до файла, который вы хотите зашифровать: ");
+                    pathFrom = scan.next();
+                    System.out.println("Напишите полный путь до файла (включая название), куда вы хотите сохранить зашифрованный файл: ");
+                    pathTo = scan.next();
+                    System.out.println("Напишите пароль для файла: ");
+                    password = scan.next();
+                    cipher.encode(pathFrom, pathTo, password);
+                    System.out.println("Шифрование прошло успешно!");
+                    System.out.println();
+                } catch (Exception e) {
+                    System.out.println("Вы ввели некоррректные данные, попробуйте еще раз");
+                    System.out.println();
+                }
             } else if (Objects.equals(answer, "2")) {
-                System.out.println("Напишите полный путь до файла, который вы хотите расшифровать: ");
-                pathFrom = scan.next();
-                System.out.println("Напишите полный путь до файла (включая название), куда вы хотите сохранить расшифрованный файл: ");
-                pathTo = scan.next();
-                System.out.println("Напишите пароль от файла: ");
-                password = scan.next();
-                cipher.decode(pathFrom, pathTo, password);
-                System.out.println("Расшифровка прошла успешно!");
-                System.out.println();
+                try {
+                    System.out.println("Напишите полный путь до файла, который вы хотите расшифровать: ");
+                    pathFrom = scan.next();
+                    System.out.println("Напишите полный путь до файла (включая название), куда вы хотите сохранить расшифрованный файл: ");
+                    pathTo = scan.next();
+                    System.out.println("Напишите пароль от файла: ");
+                    password = scan.next();
+                    cipher.decode(pathFrom, pathTo, password);
+                    System.out.println("Расшифровка прошла успешно!");
+                    System.out.println();
+                } catch (Exception e) {
+                    System.out.println("Вы ввели некоррректные данные, попробуйте еще раз");
+                    System.out.println();
+                }
             } else if (Objects.equals(answer, "3")) {
                 System.out.println("Спасибо за использование 3x crypto!");
                 break;
