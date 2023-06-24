@@ -4,7 +4,7 @@ import java.util.Objects;
 public class HillCipher {
 
     //main functions
-    public byte[] encode(byte[] byteOrig, String key) {
+    public byte[] encode(byte[] byteOrig, String key) { //only even arrays
         int[] orig = byteToIntArray(byteOrig);
         int[][] keyMatrix = keyToMatrix(key);
         int[] encoded = bytesEncode(orig, keyMatrix);
@@ -13,19 +13,10 @@ public class HillCipher {
 
     private int[] bytesEncode(int[] bytesOr, int[][] key) {
         int[] multiplyRes;
-        boolean even = bytesOr.length % 2 == 0;
-        int[] finalRes = new int[even ? bytesOr.length : bytesOr.length + 1];
-        int[] bytes;
+        int[] finalRes = new int[bytesOr.length];
 
-        if (!even) {
-            bytes = Arrays.copyOf(bytesOr, bytesOr.length + 1);
-            bytes[bytesOr.length] = 0;
-        } else {
-            bytes = bytesOr;
-        }
-
-        for (int i = 0; i < bytes.length; i = i + 2) {
-            multiplyRes = matrixMultiply(new int[]{bytes[i], bytes[i + 1]}, key);
+        for (int i = 0; i < bytesOr.length; i = i + 2) {
+            multiplyRes = matrixMultiply(new int[]{bytesOr[i], bytesOr[i + 1]}, key);
             finalRes[i] = multiplyRes[0];
             finalRes[i + 1] = multiplyRes[1];
         }
@@ -33,17 +24,13 @@ public class HillCipher {
         return finalRes;
     }
 
-    public byte[] decode(byte[] origByte, String key, boolean even) {
+    public byte[] decode(byte[] origByte, String key) { //only even arrays
         int[][] keyMatrix = keyToMatrix(key);
         keyMatrix = inverseMatrix(keyMatrix);
         int[] bytes = byteToIntArray(origByte);
         bytes = bytesDecode(bytes, keyMatrix);
         origByte = intToByteArray(bytes);
-        if (even) {
-            return origByte;
-        } else {
-            return Arrays.copyOfRange(origByte, 0, origByte.length - 1);
-        }
+        return origByte;
     }
 
     private int[] bytesDecode(int[] bytes, int[][] key) {
@@ -81,7 +68,7 @@ public class HillCipher {
             key = "key";
         }
 
-        int[] bytes = new int[key.getBytes().length];
+        int[] bytes = new int[key.length()];
         int[][] keyMatrix = new int[2][2];
 
         int plus00 = 0;

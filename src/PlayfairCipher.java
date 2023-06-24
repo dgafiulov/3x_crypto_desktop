@@ -78,7 +78,7 @@ public class PlayfairCipher {
                 }
             }
         }
-        return new byte[]{(byte) (1 / 0)};
+        return null;
     }
 
     private byte findElInMatrixByCoordinates(byte[] cords) {

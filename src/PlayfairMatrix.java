@@ -1,12 +1,17 @@
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Queue;
 
 public class PlayfairMatrix {
     ArrayDeque<Byte> key = new ArrayDeque<>();
-    private byte[][] matrix = new byte[16][16];
+    private final byte[][] matrix = new byte[16][16];
 
     public PlayfairMatrix(String key) {
         for (int i = 0; i < key.length(); i++) {
-            this.key.offer((byte) key.charAt(i));
+            if (!this.key.contains((byte) key.charAt(i))) {
+                this.key.offer((byte) key.charAt(i));
+            }
         }
     }
 
